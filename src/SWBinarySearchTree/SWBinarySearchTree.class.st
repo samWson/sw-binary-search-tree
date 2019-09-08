@@ -9,6 +9,15 @@ support the following operations:
 - Searching for values in the tree
 - Deleting values from the tree
 
+## Usage
+
+I have a class side method for easy creation of an instance with a root node 
+containing a value:
+
+```
+SWBinarySearchTree withRoot: 8. ""Answers a SWBinarySearchTree instance.""
+```
+
 ## Structure
 
 I am a collection of nodes. Each node may have exactly zero, one, or two children.
@@ -53,3 +62,15 @@ Class {
 	],
 	#category : #SWBinarySearchTree
 }
+
+{ #category : #'instance creation' }
+SWBinarySearchTree class >> withRoot: anObject [
+
+	^ self new root: (SWNode withValue: anObject) 
+]
+
+{ #category : #accessing }
+SWBinarySearchTree >> root: anSWNode [
+
+	root := anSWNode
+]
