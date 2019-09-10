@@ -18,6 +18,13 @@ containing a value:
 SWBinarySearchTree withRoot: 8. ""Answers a SWBinarySearchTree instance.""
 ```
 
+New objects can be added to the tree with `#insert:`. They are wrapped in an
+instance of `SWNode` and are the value of that node:
+
+```
+aBinarySearchTree insert: 4.
+```
+
 ## Structure
 
 I am a collection of nodes. Each node may have exactly zero, one, or two children.
@@ -67,6 +74,25 @@ Class {
 SWBinarySearchTree class >> withRoot: anObject [
 
 	^ self new root: (SWNode withValue: anObject) 
+]
+
+{ #category : #inserting }
+SWBinarySearchTree >> insert: anObject [
+	
+	(root value > anObject)
+		ifTrue: [ 
+			self root leftChild: (SWNode withValue: anObject) 
+			]
+		ifFalse: [ 
+			self root rightChild: (SWNode withValue: anObject)
+			]
+	
+]
+
+{ #category : #accessing }
+SWBinarySearchTree >> root [
+
+	^ root
 ]
 
 { #category : #accessing }
