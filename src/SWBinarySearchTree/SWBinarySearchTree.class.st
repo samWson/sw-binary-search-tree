@@ -30,7 +30,7 @@ aBinarySearchTree insert: 4.
 I am a collection of nodes. Each node may have exactly zero, one, or two children.
 Every node has exactly one parent except for the root node which has no parent.
 Each node contains one object which is its value. The children are known as 
-the left-hand and right-hand childs.
+the left-hand and right-hand child.
 
 ## Insertion
 
@@ -38,8 +38,8 @@ The nodes are ordered by their values so the tree may be searched efficiently.
 When adding new nodes if the value is less than the root node then it is added
 as the left-hand child. If the value is greater or equal then it is added as the
 right-hand child. If the node already has a left or right-hand child then the 
-value is added to that child instead, proceeding recursively until a place is
-found to add the value.
+value is passed to the child which will add it to one of its children. This 
+proceeds recursively until a place is found to add the value.
 
 ## Searching
 
@@ -57,6 +57,8 @@ search has found it.
 ## Package Information
 
 This package is built for [Jamis Bucks Weekly Programming Challenge #1](https://medium.com/@jamis/weekly-programming-challenge-1-55b63b9d2a1).
+It is intended for educational use only and should not be considered for 
+production ready code.
 
 The prefix for this package and its classes is `SW` after the initials of the 
 author Samuel Wilson.
@@ -78,14 +80,8 @@ SWBinarySearchTree class >> withRoot: anObject [
 
 { #category : #inserting }
 SWBinarySearchTree >> insert: anObject [
-	
-	(root value > anObject)
-		ifTrue: [ 
-			self root leftChild: (SWNode withValue: anObject) 
-			]
-		ifFalse: [ 
-			self root rightChild: (SWNode withValue: anObject)
-			]
+
+	root insert: anObject
 	
 ]
 

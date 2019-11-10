@@ -16,11 +16,20 @@ I have a class side method for easy creation of an instance holding a value:
 SWNode withValue: 8. ""Answers an SWNode instance.""
 ```
 
+When new values need to be added to a node use the `#insert:` method: 
+```
+anSWnode insert: 5.
+```
+
+`#insert:` is the only method that should be considered public for adding
+values to a node. The node instance will assign a value to itself or 
+delegate to one of its children, creating a new one if required.
+
 ## Instance Variables
 
-- leftChild: A child node with a value less than mine.
-- rightChild: A child node with a value greater than mine.
-- value: The object I hold. This must be of a type that has a defined ordering.
+- leftChild, `SWNode`: A child node that may hold a value less than mine.
+- rightChild, `SWNode`: A child node that may hold a value greater than mine.
+- value, `Object`: The object I hold. This must be of a type that has a defined ordering.
 "
 Class {
 	#name : #SWNode,
@@ -36,7 +45,40 @@ Class {
 { #category : #'instance creation' }
 SWNode class >> withValue: anObject [
 
-	^ self new value: anObject 
+	^ self new insert: anObject 
+]
+
+{ #category : #'adding elements' }
+SWNode >> insert: anObject [ 
+
+	value 
+		ifNil: [ value := anObject ] 
+		ifNotNil: [ self insertInToChild: anObject ]
+]
+
+{ #category : #private }
+SWNode >> insertInToChild: anObject [
+ 
+	anObject < value
+		ifTrue: [ self insertLeft: anObject ]
+		ifFalse: [ self insertRight: anObject ]
+	
+]
+
+{ #category : #private }
+SWNode >> insertLeft: anObject [
+ 
+	leftChild 
+		ifNil: [ leftChild := self class withValue: anObject ]
+		ifNotNil: [ leftChild insert: anObject ]
+]
+
+{ #category : #private }
+SWNode >> insertRight: anObject [
+
+	rightChild
+		ifNil: [ rightChild := self class withValue: anObject ] 
+		ifNotNil: [ rightChild insert: anObject ]
 ]
 
 { #category : #accessing }
@@ -46,31 +88,13 @@ SWNode >> leftChild [
 ]
 
 { #category : #accessing }
-SWNode >> leftChild: anSWNode [
-
-	leftChild := anSWNode
-]
-
-{ #category : #accessing }
 SWNode >> rightChild [
 
 	^ rightChild
 ]
 
 { #category : #accessing }
-SWNode >> rightChild: anSWNode [ 
-
-	rightChild := anSWNode
-]
-
-{ #category : #accessing }
 SWNode >> value [ 
 
 	^ value
-]
-
-{ #category : #accessing }
-SWNode >> value: anObject [
-
-	value := anObject
 ]
