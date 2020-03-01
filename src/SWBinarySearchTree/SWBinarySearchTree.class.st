@@ -9,6 +9,20 @@ support the following operations:
 - Searching for values in the tree
 - Deleting values from the tree
 
+## TODO
+
+- [x] Support insert operations
+- [x] Handle duplicate values
+- [ ] Support search operations
+  - [ ] Error handling
+- [ ] Support delete operations
+  - [ ] Error handling
+- [ ] Make the implementation a self balancing binary tree
+- [ ] Support creation of a binary tree from a collection e.g. `SWBinarySearchTree withElements: #(1 2 3 4 5 6)`
+- [ ] Error handling for value types that have no natural ordering
+- [ ] Error handling when inserting value types different to the type the tree is instantiated with e.g. adding strings to an integer tree
+- [ ] Investigate extending debugger to display visual representation of tree
+
 ## Usage
 
 I have a class side method for easy creation of an instance with a root node 

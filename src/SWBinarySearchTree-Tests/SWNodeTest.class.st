@@ -33,7 +33,10 @@ SWNodeTest >> testInsertEqualValue [
 
 	node insert: 10.
 	node insert: 10.
-	self assert: node rightChild value equals: 10
+	
+	self assert: node leftChild equals: nil.
+	self assert: node rightChild equals: nil.
+	self assert: node count equals: 2 
 
 ]
 
@@ -49,7 +52,8 @@ SWNodeTest >> testInsertGreaterThanValue [
 SWNodeTest >> testInsertInToEmptyNode [
 
 	node insert: 10.
-	self assert: node value equals: 10
+	self assert: node value equals: 10.
+	self assert: node count equals: 1
 ]
 
 { #category : #tests }
@@ -64,5 +68,5 @@ SWNodeTest >> testInsertLessThanValue [
 
 	node insert: 10.
 	node insert: 5.
-	self assert: node leftChild value equals: 5
+	self assert: node leftChild value equals: 5.
 ]
