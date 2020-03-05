@@ -29,6 +29,34 @@ SWNodeTest >> setUp [
 ]
 
 { #category : #tests }
+SWNodeTest >> testEquality [
+	
+	| first second third nilNode |
+	first := SWNode withValue: 2.
+	second := SWNode withValue: 2.
+	third := SWNode withValue: 4.
+	nilNode := SWNode new.
+	
+	self assert: first equals: second.
+	self deny: first equals: third.
+	self deny: first equals: nilNode
+]
+
+{ #category : #tests }
+SWNodeTest >> testEqualityDifferentCounts [
+	
+	| first second |
+	first := SWNode withValue: 2.
+	second := SWNode withValue: 2.
+	
+	self assert: first equals: second.
+	
+	second insert: 2.
+	
+	self deny: first equals: second
+]
+
+{ #category : #tests }
 SWNodeTest >> testInsertEqualValue [
 
 	node insert: 10.

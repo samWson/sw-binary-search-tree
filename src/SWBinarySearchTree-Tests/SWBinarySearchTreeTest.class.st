@@ -29,6 +29,56 @@ SWBinarySearchTreeTest >> setUp [
 ]
 
 { #category : #tests }
+SWBinarySearchTreeTest >> testCreationFromCollection [
+
+	| expected treeFromCollection |
+	expected := SWBinarySearchTree withRoot: 2.
+	expected 
+		insert: 4;
+		insert: 1;
+		insert: 5;
+		insert: 6;
+		insert: 3;
+		insert: 1;
+		insert: 5.
+		
+	treeFromCollection := SWBinarySearchTree withElements: #(2 4 1 5 6 3 1 5).
+
+	self assert: treeFromCollection equals: expected
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testEquality [
+
+	| elemments first second |
+	elemments := #(4 2 6 1 3 5 1 6).
+	first := SWBinarySearchTree withElements: elemments.
+	second := SWBinarySearchTree withElements: elemments.
+	
+	self assert: first equals: second 
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testEqualityWithEmptyAndNonEmptyTrees [
+
+	| empty nonEmpty |
+	empty := SWBinarySearchTree new.
+	nonEmpty := SWBinarySearchTree withElements: #(4 5 1 6 2 3 1 5).
+	
+	self deny: empty equals: nonEmpty 
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testEqualityWithEmptyTrees [
+
+	| first second |
+	first := SWBinarySearchTree new.
+	second := SWBinarySearchTree new.
+	
+	self assert: first equals: second 
+]
+
+{ #category : #tests }
 SWBinarySearchTreeTest >> testInsertGreaterThanValue [
 
 	tree insert: 10.

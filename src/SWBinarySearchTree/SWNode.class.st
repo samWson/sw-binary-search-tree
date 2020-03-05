@@ -26,6 +26,11 @@ delegate to one of its children, creating a new one if required. If a
 value is inserted that is equal to the value I hold then my count will
 increase by one to record the number of duplicate values I hold.
 
+## Equality
+
+I can be compared for equality with another `SWNode` instance. We are
+equal if our values and counts are identical.
+
 ## Instance Variables
 
 - count, `Integer`: The number of duplicates of the value I hold.
@@ -49,6 +54,12 @@ Class {
 SWNode class >> withValue: anObject [
 
 	^ self new insert: anObject 
+]
+
+{ #category : #comparing }
+SWNode >> = anSWNode [
+
+	^ (self value = anSWNode value) and: (self count = anSWNode count)
 ]
 
 { #category : #accessing }

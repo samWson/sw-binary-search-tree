@@ -18,10 +18,12 @@ support the following operations:
 - [ ] Support delete operations
   - [ ] Error handling
 - [ ] Make the implementation a self balancing binary tree
-- [ ] Support creation of a binary tree from a collection e.g. `SWBinarySearchTree withElements: #(1 2 3 4 5 6)`
+- [x] Support creation of a binary tree from a collection e.g. `SWBinarySearchTree withElements: #(1 2 3 4 5 6)`
+  - [x] Implement equality testing of trees with same items to aid testing
+  - [x] Update class comment on equality checking
 - [ ] Error handling for value types that have no natural ordering
 - [ ] Error handling when inserting value types different to the type the tree is instantiated with e.g. adding strings to an integer tree
-- [ ] Investigate extending debugger to display visual representation of tree
+- [ ] Investigate extending debugger to display visual representation of tree (Refer to `GTInspector class`)
 
 ## Usage
 
@@ -64,6 +66,13 @@ the search proceeds to the left-hand child. If the searched value is greater
 then the search proceeds to the right-hand node. If the value is equal then the
 search has found it. 
 
+## Equality
+
+I can be tested with another `SWBinarySearchTree` instance to see if we are
+equal. We are equal if:
+- both of our root nodes are `nil` or...
+- the values, positions, and counts of all our nodes are identical
+
 ## Instance Variables
 
 - root: the root node of the tree.
@@ -87,26 +96,50 @@ Class {
 }
 
 { #category : #'instance creation' }
+SWBinarySearchTree class >> withElements: aCollection [
+	
+	| tree |
+	tree := self new.
+	aCollection do: [ :each | tree insert: each ].
+	^ tree
+]
+
+{ #category : #'instance creation' }
 SWBinarySearchTree class >> withRoot: anObject [
 
-	^ self new root: (SWNode withValue: anObject) 
+	^ self new insert: anObject 
+]
+
+{ #category : #comparing }
+SWBinarySearchTree >> = aBinarySearchTree [
+
+	^ self nodeRecursivelyEqual: self root with: aBinarySearchTree root
 ]
 
 { #category : #inserting }
 SWBinarySearchTree >> insert: anObject [
 
-	root insert: anObject
+	root
+		ifNil: [ root := SWNode withValue: anObject ] 
+		ifNotNil: [ root insert: anObject ]
+]
+
+{ #category : #comparing }
+SWBinarySearchTree >> nodeRecursivelyEqual: anSWNode with: anSWNode2 [
+	"Recursively compare nodes for equality, returing true if all values are identical."
 	
+	(anSWNode isNil and: anSWNode2 isNil) ifTrue: [ ^ true ].
+	
+	(anSWNode isNil and: anSWNode2 isNotNil) ifTrue: [ ^ false ].
+	
+	(anSWNode isNotNil and: anSWNode2 isNil) ifTrue: [ ^ false ].
+	
+	^ (anSWNode = anSWNode2) and: (self nodeRecursivelyEqual: anSWNode leftChild with: anSWNode2 leftChild);
+		and: (self nodeRecursivelyEqual: anSWNode rightChild with: anSWNode2 rightChild)
 ]
 
 { #category : #accessing }
 SWBinarySearchTree >> root [
 
 	^ root
-]
-
-{ #category : #accessing }
-SWBinarySearchTree >> root: anSWNode [
-
-	root := anSWNode
 ]
