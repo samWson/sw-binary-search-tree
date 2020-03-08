@@ -68,6 +68,21 @@ SWNode >> count [
 	^ count
 ]
 
+{ #category : #searching }
+SWNode >> find: anObject [ 
+	
+	| isFound |
+	isFound := false.
+	
+	anObject = value ifTrue: [ isFound := true ].
+	
+	anObject < value ifTrue: [ self leftChild ifNotNil: [ :node | isFound := node find: anObject ] ].
+	
+	anObject > value ifTrue: [ self rightChild ifNotNil: [ :node | isFound := node find: anObject ] ].
+	
+	^ isFound 
+]
+
 { #category : #initialization }
 SWNode >> initialize [
 

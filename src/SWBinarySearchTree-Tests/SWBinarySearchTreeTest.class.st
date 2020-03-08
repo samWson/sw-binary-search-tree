@@ -23,9 +23,7 @@ SWBinarySearchTreeTest >> setUp [
 	
 	super setUp.
 	tree := SWBinarySearchTree withRoot: 8.
-	treeWithChildren := SWBinarySearchTree withRoot: 8.
-	treeWithChildren insert: 4.
-	treeWithChildren insert: 10
+	treeWithChildren := SWBinarySearchTree withElements: #(8 4 10 5 9)
 ]
 
 { #category : #tests }
@@ -79,6 +77,28 @@ SWBinarySearchTreeTest >> testEqualityWithEmptyTrees [
 ]
 
 { #category : #tests }
+SWBinarySearchTreeTest >> testFindIfFalseDoAdditionalAction [
+
+	| result |
+	result := tree find: 8 ifFalse: [ :t | t insert: 10 ].
+
+	self assert: result.
+	
+	self deny: (tree find: 10)	
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testFindIfFalseNoAdditionalAction [
+
+	| result |
+	result := tree find: 10 ifFalse: [ :t | t insert: 10 ].
+
+	self deny: result.
+	
+	self assert: (tree find: 10)	
+]
+
+{ #category : #tests }
 SWBinarySearchTreeTest >> testInsertGreaterThanValue [
 
 	tree insert: 10.
@@ -98,4 +118,39 @@ SWBinarySearchTreeTest >> testInsertTreeWithChildrenLessThanValue [
 	treeWithChildren insert: 3.
 	self assert: treeWithChildren root leftChild leftChild value equals: 3 
 	
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testSearchEmptyTree [
+
+	| emptyTree |
+	emptyTree := SWBinarySearchTree new.
+	
+	self deny: (emptyTree find: 1).
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testSearchMultiNodeTreeFalse [
+
+	self deny: (treeWithChildren find: 12).
+	self deny: (treeWithChildren find: 2)
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testSearchMultiNodeTreeTrue [
+
+	self assert: (treeWithChildren find: 5).
+	self assert: (treeWithChildren find: 9)
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testSearchSingleNodeTreeFalse [
+
+	self deny: (tree find: 10)
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testSearchSingleNodeTreeTrue [
+
+	self assert: (tree find: 8)
 ]

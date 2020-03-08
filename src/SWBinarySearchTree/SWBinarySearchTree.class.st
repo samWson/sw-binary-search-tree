@@ -13,17 +13,15 @@ support the following operations:
 
 - [x] Support insert operations
 - [x] Handle duplicate values
-- [ ] Support search operations
-  - [ ] Error handling
+- [x] Support search operations
 - [ ] Support delete operations
   - [ ] Error handling
 - [ ] Make the implementation a self balancing binary tree
 - [x] Support creation of a binary tree from a collection e.g. `SWBinarySearchTree withElements: #(1 2 3 4 5 6)`
-  - [x] Implement equality testing of trees with same items to aid testing
-  - [x] Update class comment on equality checking
 - [ ] Error handling for value types that have no natural ordering
 - [ ] Error handling when inserting value types different to the type the tree is instantiated with e.g. adding strings to an integer tree
 - [ ] Investigate extending debugger to display visual representation of tree (Refer to `GTInspector class`)
+- [ ] Traversal is the same for each action: insert, search, delete. Consider making this action generic e.g. paramertise the action in a block
 
 ## Usage
 
@@ -34,11 +32,32 @@ containing a value:
 SWBinarySearchTree withRoot: 8. ""Answers a SWBinarySearchTree instance.""
 ```
 
+A tree can also be created from the contents of a collection:
+
+```
+SWBinarySearchTree withElements: #(5 4 6 1 2 3).
+```
+
 New objects can be added to the tree with `#insert:`. They are wrapped in an
 instance of `SWNode` and are the value of that node:
 
 ```
 aBinarySearchTree insert: 4.
+```
+
+To test if an object is in the tree use `#find:`. `true` will be returned
+if the object is found and `false` if it is not:
+
+```
+aBinarySearchTree find: 4. ""Answers `true`.""
+```
+
+If an object is not in the tree the method `#find:ifFalse:` will do an
+alternative action in a block if the `find` action returned `false`:
+
+```
+aBinarySearchTree find: 10 ifFalse: [ :tree | tree insert: 10 ].
+aBinarySearchTree find: 10. ""Answers `true`.""
 ```
 
 ## Structure
@@ -114,6 +133,27 @@ SWBinarySearchTree class >> withRoot: anObject [
 SWBinarySearchTree >> = aBinarySearchTree [
 
 	^ self nodeRecursivelyEqual: self root with: aBinarySearchTree root
+]
+
+{ #category : #searching }
+SWBinarySearchTree >> find: anObject [
+
+	^ root 
+		ifNil: [ false ]
+		ifNotNil: [ root find: anObject ]
+]
+
+{ #category : #searching }
+SWBinarySearchTree >> find: anObject ifFalse: aBlockClosure [
+	
+	^ (self find: anObject)
+		ifTrue: [ true ]
+		ifFalse: [ 
+			aBlockClosure cull: self. 
+			false. 
+			]
+	
+
 ]
 
 { #category : #inserting }
