@@ -29,31 +29,33 @@ SWNodeTest >> setUp [
 ]
 
 { #category : #tests }
-SWNodeTest >> testEquality [
-	
-	| first second third nilNode |
+SWNodeTest >> testEqualValues [
+
+	| first second third firstNilNode secondNilNode |
 	first := SWNode withValue: 2.
 	second := SWNode withValue: 2.
 	third := SWNode withValue: 4.
-	nilNode := SWNode new.
+	firstNilNode := SWNode new.
+	secondNilNode := SWNode new.
 	
-	self assert: first equals: second.
-	self deny: first equals: third.
-	self deny: first equals: nilNode
+	self assert: (first equalValues: second).
+	self deny: (first equalValues: third).
+	self deny: (first equalValues: firstNilNode).
+	self assert: (firstNilNode equalValues: secondNilNode)
 ]
 
 { #category : #tests }
-SWNodeTest >> testEqualityDifferentCounts [
+SWNodeTest >> testEqualValuesWithDifferentCounts [
 	
 	| first second |
 	first := SWNode withValue: 2.
 	second := SWNode withValue: 2.
 	
-	self assert: first equals: second.
+	self assert: (first equalValues: second).
 	
 	second insert: 2.
 	
-	self deny: first equals: second
+	self deny: (first equalValues: second)
 ]
 
 { #category : #tests }

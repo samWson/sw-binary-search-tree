@@ -42,18 +42,7 @@ SWBinarySearchTreeTest >> testCreationFromCollection [
 		
 	treeFromCollection := SWBinarySearchTree withElements: #(2 4 1 5 6 3 1 5).
 
-	self assert: treeFromCollection equals: expected
-]
-
-{ #category : #tests }
-SWBinarySearchTreeTest >> testEquality [
-
-	| elemments first second |
-	elemments := #(4 2 6 1 3 5 1 6).
-	first := SWBinarySearchTree withElements: elemments.
-	second := SWBinarySearchTree withElements: elemments.
-	
-	self assert: first equals: second 
+	self assert: (treeFromCollection hasEqualElements: expected)
 ]
 
 { #category : #tests }
@@ -64,16 +53,6 @@ SWBinarySearchTreeTest >> testEqualityWithEmptyAndNonEmptyTrees [
 	nonEmpty := SWBinarySearchTree withElements: #(4 5 1 6 2 3 1 5).
 	
 	self deny: empty equals: nonEmpty 
-]
-
-{ #category : #tests }
-SWBinarySearchTreeTest >> testEqualityWithEmptyTrees [
-
-	| first second |
-	first := SWBinarySearchTree new.
-	second := SWBinarySearchTree new.
-	
-	self assert: first equals: second 
 ]
 
 { #category : #tests }
@@ -96,6 +75,51 @@ SWBinarySearchTreeTest >> testFindIfFalseNoAdditionalAction [
 	self deny: result.
 	
 	self assert: (tree find: 10)	
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testHasEqualElementsFalse [
+
+	| elements first second |
+	elements := #(4 2 6 1 3 5 1 6).
+	first := SWBinarySearchTree withElements: elements.
+	second := SWBinarySearchTree withElements: elements.
+	first insert: 1.
+	
+	self deny: (first hasEqualElements: second)
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testHasEqualElementsNil [
+
+	| first second |
+	first := SWBinarySearchTree new.
+	second := SWBinarySearchTree new.
+
+	self assert: (first hasEqualElements: second)
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testHasEqualElementsNilAndNotNil [
+
+	| nilTree notNilTree |
+	nilTree := SWBinarySearchTree new.
+	notNilTree := SWBinarySearchTree withRoot: 4.
+
+	self deny: (notNilTree hasEqualElements: nilTree).
+	self deny: (nilTree hasEqualElements: notNilTree)
+	
+]
+
+{ #category : #tests }
+SWBinarySearchTreeTest >> testHasEqualElementsTrue [
+
+	| elements first second |
+	elements := #(4 2 6 1 3 5 1 6).
+	first := SWBinarySearchTree withElements: elements.
+	second := SWBinarySearchTree withElements: elements.
+	
+	self assert: (first hasEqualElements: second)
 ]
 
 { #category : #tests }

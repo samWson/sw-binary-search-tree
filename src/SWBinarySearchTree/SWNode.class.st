@@ -28,8 +28,8 @@ increase by one to record the number of duplicate values I hold.
 
 ## Equality
 
-I can be compared for equality with another `SWNode` instance. We are
-equal if our values and counts are identical.
+I can be compared with another `SWNode` to see if we have equal values
+with `#equalValues`. We are equal if our values and counts are identical.
 
 ## Instance Variables
 
@@ -56,16 +56,16 @@ SWNode class >> withValue: anObject [
 	^ self new insert: anObject 
 ]
 
-{ #category : #comparing }
-SWNode >> = anSWNode [
-
-	^ (self value = anSWNode value) and: (self count = anSWNode count)
-]
-
 { #category : #accessing }
 SWNode >> count [
 
 	^ count
+]
+
+{ #category : #comparing }
+SWNode >> equalValues: anSWNode [
+
+	^ (self value = anSWNode value) and: (self count = anSWNode count)
 ]
 
 { #category : #searching }

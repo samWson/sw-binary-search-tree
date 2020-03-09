@@ -16,12 +16,16 @@ support the following operations:
 - [x] Support search operations
 - [ ] Support delete operations
   - [ ] Error handling
+- [x] Redefine equality
+  - [x] Un-override `#=`
+  - [x] Make separate `#hasEqualElements:`#equalValues:` for the tree and node classes to test equality based on mutable contents.
+  - [x] Update class commments
 - [ ] Make the implementation a self balancing binary tree
 - [x] Support creation of a binary tree from a collection e.g. `SWBinarySearchTree withElements: #(1 2 3 4 5 6)`
 - [ ] Error handling for value types that have no natural ordering
 - [ ] Error handling when inserting value types different to the type the tree is instantiated with e.g. adding strings to an integer tree
 - [ ] Investigate extending debugger to display visual representation of tree (Refer to `GTInspector class`)
-- [ ] Traversal is the same for each action: insert, search, delete. Consider making this action generic e.g. paramertise the action in a block
+- [ ] Traversal is the same for each action: equality, insert, search, delete. Consider making this action generic e.g. paramertise the action in a block
 
 ## Usage
 
@@ -87,10 +91,14 @@ search has found it.
 
 ## Equality
 
-I can be tested with another `SWBinarySearchTree` instance to see if we are
-equal. We are equal if:
+I can be tested with another `SWBinarySearchTree` instance to see if we have
+equal contents. We are equal if:
 - both of our root nodes are `nil` or...
 - the values, positions, and counts of all our nodes are identical
+
+I do not override `#=` or `#hash`. It is difficult to properly implement
+`#hash` as I have no immutable instance variables to create a constant
+hash value from.
 
 ## Instance Variables
 
@@ -129,12 +137,6 @@ SWBinarySearchTree class >> withRoot: anObject [
 	^ self new insert: anObject 
 ]
 
-{ #category : #comparing }
-SWBinarySearchTree >> = aBinarySearchTree [
-
-	^ self nodeRecursivelyEqual: self root with: aBinarySearchTree root
-]
-
 { #category : #searching }
 SWBinarySearchTree >> find: anObject [
 
@@ -156,6 +158,12 @@ SWBinarySearchTree >> find: anObject ifFalse: aBlockClosure [
 
 ]
 
+{ #category : #comparing }
+SWBinarySearchTree >> hasEqualElements: aBinarySearchTree [
+
+	^ self nodeRecursivelyEqual: self root with: aBinarySearchTree root
+]
+
 { #category : #inserting }
 SWBinarySearchTree >> insert: anObject [
 
@@ -167,15 +175,19 @@ SWBinarySearchTree >> insert: anObject [
 { #category : #comparing }
 SWBinarySearchTree >> nodeRecursivelyEqual: anSWNode with: anSWNode2 [
 	"Recursively compare nodes for equality, returing true if all values are identical."
-	
+
 	(anSWNode isNil and: anSWNode2 isNil) ifTrue: [ ^ true ].
 	
 	(anSWNode isNil and: anSWNode2 isNotNil) ifTrue: [ ^ false ].
 	
 	(anSWNode isNotNil and: anSWNode2 isNil) ifTrue: [ ^ false ].
+
+	^ (anSWNode equalValues: anSWNode2) and: [ 
+		(self nodeRecursivelyEqual: anSWNode leftChild with: anSWNode2 leftChild) 
+			and: (self nodeRecursivelyEqual: anSWNode rightChild with: anSWNode2 rightChild) 
+			]
 	
-	^ (anSWNode = anSWNode2) and: (self nodeRecursivelyEqual: anSWNode leftChild with: anSWNode2 leftChild);
-		and: (self nodeRecursivelyEqual: anSWNode rightChild with: anSWNode2 rightChild)
+
 ]
 
 { #category : #accessing }
